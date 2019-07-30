@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+     KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+-->
+<html>
+    <head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=10,chrome=1">
+		<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, target-densitydpi=medium-dpi'>
+		<meta name="apple-mobile-web-app-capable" content="no">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta name="format-detection" content="telephone=no">
+		<link rel="stylesheet" href="css/appd.css" type="text/css">
+		<script type="text/javascript" src="js/jquery.min.js"></script>
+		<script type="text/javascript" src="js/jquery-migrate-1.2.1.min.js"></script>
+		<script type="text/javascript" src="js/modernizr.js"></script>
+		<script type="text/javascript" src="js/jquery.animate.min.js"></script>
+		<script type="text/javascript" src="js/respond.src.js"></script>
+    </head>
+    <body>
+		<div id="appd">
+			<div id="wrap">
+				<section id="mn">
+					<div class="m1">
+						<div><strong id="auth_type">로딩중...</strong> <span id="app_number">로딩중...</span></div>
+					</div>
+					<div class="m2">
+						<div><strong id="now_date">로딩중...</strong> <span id="app_service_day">로딩중...</span></div>
+					</div>
+					<nav>
+						<ul>
+							<li class="n1"><a href="javascript://" id="user_setting">설정</a></li>
+							<li class="n2"><a href="javascript://" id="user_receiver_log">로그</a> <em id="log_cnt">0</em></li>
+							<li class="n3"><a href="javascript://" id="user_notice">공지사항</a> <em id="notice_cnt">0</em></li>
+							<li class="n4"><a href="javascript://" id="user_qna">질문과 답변</a> <em id="qna_cnt">0</em></li>
+						</ul>
+					</nav>
+				</section>
+		
+			</div>
+		</div>    
+        <script type="text/javascript" src="cordova.js"></script>
+        <script type="text/javascript" src="js/index.js"></script>
+        <script  src="http://code.jquery.com/jquery-latest.min.js"></script>
+        <!-- <script type='text/javascript' src='js/nw.viewport.js'></script> -->
+        <script type="text/javascript" src="js/TelephoneNumber.js"></script>
+        <script type="text/javascript" src="js/count_down.js"></script>
+        <script type="text/javascript">
+        	//nw.viewport({ width : 360});
+        	$(function() {
+        		/**
+        		SMS 발송시 사용
+				var messageInfo = {
+   					phoneNumber: "01045084525",
+   					textMessage: "This is a test message"
+   				};
+   				sms.sendMessage(messageInfo, function(message) {
+   					console.log("success: " + message);
+   				}, function(error) {
+   					console.log("code: " + error.code + ", message: " + error.message);
+   				});        		
+        		**/ 
+        		$('#user_setting').on('click', function() {
+        			//app.getCsSelect();
+        			spinnerplugin.show({timeout: 10});
+        			app.AuthSess();
+        			setTimeout(function () {
+        				if (app._AuthPass) {
+        					var win_1 = window.open(app._ServerHost+"/user/user_setting.php", "_blank","location=no");
+        					win_1.addEventListener('loadstop', function(event) {
+        						spinnerplugin.hide();
+        					    if (event.url.match('/mobile/close')) {
+        					    	win_1.close();
+        					    	return false;
+        					    }
+        					});
+        					win_1.addEventListener('exit', function() {
+        						spinnerplugin.show({timeout: 2});
+        						app.getData();
+        						return false;
+        					});
+        					return false;
+        				} else {
+        					spinnerplugin.hide();
+        					app.Nalert('미인증 앱번호 입니다.');
+        					return false;
+        				}
+        			}, 500);
+        		});        		
+        		$('#user_receiver_log').on('click', function() {
+        			spinnerplugin.show({timeout: 10});
+        			app.AuthSess();
+        			setTimeout(function () {
+        				if (app._AuthPass) {
+        					var win_2 = window.open(app._ServerHost+"/user/user_receiver_list.php", "_blank","location=no");
+        					win_2.addEventListener('loadstop', function(event) {
+        						spinnerplugin.hide();
+        					    if (event.url.match('/mobile/close')) {
+        					    	win_2.close();
+        					    	return false;
+        					    }
+        					});
+        					return false;
+        				} else {
+        					spinnerplugin.hide();
+        					app.Nalert('미인증 앱번호 입니다.');
+        					return false;
+        				}
+        			}, 500);
+        		});
+        		$('#user_notice').on('click', function() {
+        			spinnerplugin.show({timeout: 10});
+        			app.AuthSess();
+        			setTimeout(function () {
+        				if (app._AuthPass) {
+        					var win_3 = window.open(app._ServerHost+"/user/user_notice_list.php", "_blank","location=no");
+        					win_3.addEventListener('loadstop', function(event) {
+        						spinnerplugin.hide();
+        					    if (event.url.match('/mobile/close')) {
+        					    	win_3.close();
+        					    	return false;
+        					    }
+        					});
+        					return false;
+        				} else {
+        					spinnerplugin.hide();
+        					app.Nalert('미인증 앱번호 입니다.');
+        					return false;
+        				}
+        			}, 500);
+        		});  
+        		$('#user_qna').on('click', function() {
+        			spinnerplugin.show({timeout: 10});
+        			app.AuthSess();
+        			setTimeout(function () {
+        				if (app._AuthPass) {
+        					var win_4 = window.open(app._ServerHost+"/user/user_qna_list.php", "_blank","location=no");
+        					win_4.addEventListener('loadstop', function(event) {
+        						spinnerplugin.hide();
+        					    if (event.url.match('/mobile/close')) {
+        					    	win_4.close();
+        					    	return false;
+        					    }
+        					});
+        					return false;
+        				} else {
+        					spinnerplugin.hide();
+        					app.Nalert('미인증 앱번호 입니다.');
+        					return false;
+        				}
+        			}, 500);
+        		});
+        	});
+        </script>
+    </body>
+</html>
